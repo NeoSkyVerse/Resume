@@ -3,340 +3,770 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>یاشا یاورزاده | رزومه</title>
+  <title>یاشا یاورزاده | NeoSkyVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* ── Color tokens (OKLCH) ─────────────────────────────────── */
     :root {
-      --bg:        oklch(97% 0.005 260);
-      --surface:   oklch(100% 0 0);
-      --raised:    oklch(94% 0.008 260);
-      --border:    oklch(88% 0.010 260);
-      --text:      oklch(18% 0.015 260);
-      --muted:     oklch(50% 0.015 260);
-      --accent:    oklch(55% 0.18 260);
-      --accent-lt: oklch(92% 0.06  260);
-      --radius-sm: 8px;
-      --radius-lg: 16px;
+      --bg-0:        oklch(12% 0.06 282);
+      --bg-1:        oklch(16% 0.07 280);
+      --bg-2:        oklch(20% 0.06 278);
+      --bg-3:        oklch(25% 0.07 276);
+      --border:      oklch(32% 0.09 278 / .6);
+      --text:        oklch(96% 0.01 280);
+      --text-muted:  oklch(62% 0.04 280);
+      --cyan:        oklch(76% 0.17 194);
+      --magenta:     oklch(67% 0.22 328);
+      --purple:      oklch(62% 0.19 290);
+      --cyan-glow:   oklch(76% 0.17 194 / .25);
+      --magenta-glow:oklch(67% 0.22 328 / .20);
+
+      --r-sm: 8px;
+      --r-md: 14px;
+      --r-lg: 22px;
+      --r-xl: 32px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg:        oklch(14% 0.015 260);
-        --surface:   oklch(18% 0.015 260);
-        --raised:    oklch(22% 0.015 260);
-        --border:    oklch(30% 0.015 260);
-        --text:      oklch(96% 0.005 260);
-        --muted:     oklch(65% 0.015 260);
-        --accent:    oklch(70% 0.16  260);
-        --accent-lt: oklch(25% 0.06  260);
-      }
-    }
-
+    /* ── Reset ───────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    html { scroll-behavior: smooth; }
     body {
-      font-family: system-ui, "Segoe UI", sans-serif;
-      background: var(--bg);
+      font-family: 'Vazirmatn', system-ui, sans-serif;
+      background: var(--bg-0);
       color: var(--text);
-      line-height: 1.7;
-      font-size: 1rem;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Scroll-reveal ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Background grid decoration ─────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: .18;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* ─── HEADER ─── */
-    .hero {
-      background: var(--surface);
+    /* ── Progress bar ────────────────────────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 100;
+      transition: transform .1s linear;
+    }
+
+    /* ── Navbar ──────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px;
+      background: oklch(12% 0.06 282 / .85);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      padding: 48px 24px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
+      z-index: 90;
+    }
+    .nav-logo img { height: 40px; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-size: .85rem;
+      color: var(--text-muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       text-align: center;
+      padding: 120px 24px 80px;
+      z-index: 1;
+      overflow: hidden;
+    }
+    /* Glow blobs */
+    #hero::after {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+      top: -80px; right: -120px;
+      pointer-events: none;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--magenta-glow) 0%, transparent 70%);
+      bottom: -60px; left: -100px;
+      pointer-events: none;
+      z-index: -1;
     }
 
-    .logo-wrap img {
-      height: 56px;
-      object-fit: contain;
+    .avatar-ring {
+      position: relative;
+      width: 180px; height: 180px;
+      margin: 0 auto 28px;
     }
-
-    .avatar {
-      width: 140px;
-      height: 140px;
+    .avatar-ring::before {
+      content: '';
+      position: absolute; inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(var(--cyan), var(--magenta), var(--purple), var(--cyan));
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) {
+      .avatar-ring::before { animation: none; }
+      .reveal { transition: none; }
+    }
+    .avatar-ring img {
+      position: relative;
+      width: 100%; height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      border: 3px solid var(--border);
+      object-position: center top;
+      border: 4px solid var(--bg-0);
+      z-index: 1;
     }
 
-    .hero h1 {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
+    .hero-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: .75rem;
+      color: var(--cyan);
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+    #hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
       font-weight: 700;
-      letter-spacing: -0.02em;
+      line-height: 1.25;
     }
-
-    .hero h1 span {
-      color: var(--accent);
+    #hero h1 span {
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-
-    .hero p.tagline {
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 480px;
+    .hero-title-en {
+      font-size: clamp(.95rem, 2vw, 1.1rem);
+      color: var(--text-muted);
+      margin-top: 6px;
+      letter-spacing: .04em;
     }
-
-    .contact-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
       justify-content: center;
-      font-size: 0.9rem;
+      margin: 20px auto 0;
+      max-width: 560px;
     }
-
-    .contact-row a {
-      color: var(--accent);
-      text-decoration: none;
-      background: var(--accent-lt);
-      padding: 6px 14px;
-      border-radius: 99px;
-      transition: opacity 0.15s;
+    .tag {
+      padding: 5px 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: .8rem;
+      color: var(--text-muted);
+      transition: border-color .2s, color .2s;
     }
+    .tag:hover { border-color: var(--cyan); color: var(--cyan); }
 
-    .contact-row a:hover { opacity: 0.8; }
+    .hero-cta {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 36px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px;
+      border-radius: var(--r-md);
+      font-family: inherit;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: oklch(12% 0.06 282);
+      box-shadow: 0 4px 24px var(--cyan-glow);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 32px oklch(76% 0.17 194 / .4);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
 
-    /* ─── MAIN LAYOUT ─── */
-    main {
-      max-width: 860px;
+    /* ── Section base ────────────────────────────────────────── */
+    section {
+      position: relative;
+      padding: 80px 24px;
+      z-index: 1;
+    }
+    .container {
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 40px 20px 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
     }
-
-    /* ─── SECTION ─── */
-    section { display: flex; flex-direction: column; gap: 16px; }
-
-    .section-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+    .section-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .78rem;
+      color: var(--cyan);
+      letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--muted);
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+    .section-label::before {
+      content: '';
+      width: 28px; height: 2px;
+      background: var(--cyan);
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 40px;
     }
 
-    /* ─── SKILLS ─── */
-    .skills-grid {
+    /* ── About ───────────────────────────────────────────────── */
+    #about { background: var(--bg-1); }
+    .about-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
     }
-
-    .skill-item { display: flex; flex-direction: column; gap: 6px; }
-
-    .skill-label {
+    .about-text p {
+      color: var(--text-muted);
+      font-size: .95rem;
+      margin-bottom: 16px;
+    }
+    .about-contact {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-top: 24px;
+    }
+    .contact-row {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .9rem;
+    }
+    .contact-icon {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .about-logo {
       display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-logo img {
+      max-width: 280px;
+      filter: drop-shadow(0 0 32px var(--cyan-glow));
+    }
+
+    /* ── Services ────────────────────────────────────────────── */
+    #services { background: var(--bg-0); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .service-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 28px 24px;
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+    }
+    .service-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px var(--cyan-glow);
+    }
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+    .service-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .service-card p {
+      font-size: .83rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── Portfolio ───────────────────────────────────────────── */
+    #portfolio { background: var(--bg-1); }
+    .portfolio-header {
+      display: flex; align-items: flex-end;
       justify-content: space-between;
-      font-size: 0.9rem;
+      flex-wrap: wrap; gap: 16px;
+      margin-bottom: 32px;
     }
-
-    .skill-label span:last-child { color: var(--muted); font-size: 0.8rem; }
-
-    .bar-track {
-      height: 6px;
-      background: var(--raised);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 99px;
-      transform-origin: right;
-      animation: bar-in 0.6s ease both;
-    }
-
-    @keyframes bar-in {
-      from { transform: scaleX(0); }
-      to   { transform: scaleX(1); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .bar-fill { animation: none; }
-    }
-
-    /* ─── PORTFOLIO ─── */
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
     }
-
     .portfolio-card {
-      background: var(--surface);
+      background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--r-lg);
       overflow: hidden;
-      transition: box-shadow 0.18s, transform 0.18s;
+      transition: transform .25s, box-shadow .25s;
     }
-
     .portfolio-card:hover {
-      box-shadow: 0 4px 20px oklch(0% 0 0 / 12%);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px oklch(67% 0.22 328 / .2);
     }
-
-    .portfolio-card img {
+    .portfolio-thumb {
       width: 100%;
-      aspect-ratio: 4/3;
+      aspect-ratio: 16 / 10;
       object-fit: cover;
-      display: block;
+      background: var(--bg-3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem;
+      color: var(--text-muted);
     }
-
-    .portfolio-card .card-label {
-      padding: 10px 14px;
-      font-size: 0.85rem;
-      color: var(--muted);
+    .portfolio-thumb-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: var(--bg-3);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: .8rem;
+      border-bottom: 1px solid var(--border);
     }
+    .portfolio-thumb-placeholder span { font-size: 2rem; }
+    .portfolio-info { padding: 16px 18px; }
+    .portfolio-info h4 { font-size: .9rem; margin-bottom: 4px; }
+    .portfolio-info p { font-size: .78rem; color: var(--text-muted); }
 
-    /* ─── CTA ─── */
-    .cta-block {
-      background: var(--accent-lt);
+    .portfolio-cta-box {
+      background: linear-gradient(135deg, var(--bg-2), var(--bg-3));
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px 24px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      border-radius: var(--r-xl);
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
-
-    .cta-block p {
-      font-size: 1.05rem;
-      font-weight: 500;
+    .portfolio-cta-box::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, var(--cyan-glow), transparent 65%);
     }
-
-    .btn {
-      display: inline-block;
-      background: var(--accent);
-      color: oklch(100% 0 0);
-      padding: 12px 28px;
-      border-radius: var(--radius-sm);
+    .portfolio-cta-box h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .portfolio-cta-box p {
+      color: var(--text-muted);
+      font-size: .88rem;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .btn-cta {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--cyan), var(--magenta));
+      color: oklch(12% 0.06 282);
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--r-md);
+      cursor: pointer;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: opacity 0.15s;
-      white-space: nowrap;
+      transition: transform .18s, box-shadow .18s;
+    }
+    .btn-cta:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px oklch(76% 0.17 194 / .45);
     }
 
-    .btn:hover { opacity: 0.88; }
+    /* ── Contact ─────────────────────────────────────────────── */
+    #contact { background: var(--bg-0); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    .contact-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 28px;
+    }
+    .contact-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .ci-icon {
+      width: 42px; height: 42px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 1.2rem;
+    }
+    .ci-label { font-size: .75rem; color: var(--text-muted); }
+    .ci-value { font-size: .9rem; font-weight: 500; direction: ltr; text-align: right; }
 
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 600px) {
-      .hero { padding: 32px 16px 28px; }
-      .avatar { width: 110px; height: 110px; }
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      background: var(--bg-1);
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      z-index: 1;
+    }
+    footer img { height: 36px; margin: 0 auto 12px; }
+    footer p { font-size: .8rem; color: var(--text-muted); }
+    footer span { color: var(--cyan); }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 720px) {
+      nav { padding: 12px 18px; }
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: .78rem; }
+      .about-grid,
+      .contact-grid { grid-template-columns: 1fr; }
+      .about-logo { order: -1; }
+      .about-logo img { max-width: 200px; }
+      .portfolio-cta-box { padding: 28px 20px; }
+    }
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="hero">
-    <div class="logo-wrap">
-      <img src="NeoSkyVerse.webp" alt="لوگوی NeoSkyVerse" />
+  <div id="progress-bar"></div>
+
+  <!-- ── Nav ──────────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-logo">
+      <img src="NeoSkyVerse.webp" alt="NeoSkyVerse" />
     </div>
-    <img class="avatar" src="Yasha.webp" alt="یاشا یاورزاده" />
-    <div>
-      <h1>یاشا <span>یاورزاده</span></h1>
-      <p class="tagline">طراح گرافیک · تولیدکننده محتوا · ویراستار ویدیوی تبلیغاتی · طراح وب</p>
+    <div class="nav-links">
+      <a href="#about">درباره</a>
+      <a href="#services">خدمات</a>
+      <a href="#portfolio">نمونه‌کار</a>
+      <a href="#contact">تماس</a>
     </div>
-    <div class="contact-row">
-      <a href="tel:09335642236">📞 ۰۹۳۳۵۶۴۲۲۳۶</a>
-      <a href="https://parsiantanpoosh.ir/" target="_blank" rel="noopener">🌐 پارسیان تنپوش</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="avatar-ring reveal">
+      <!--
+        نام فایل عکس را به profile.webp تغییر بده
+        و داخل پوشه images/ آپلود کن
+      -->
+      <img src="Yasha.webp" alt="یاشا یاورزاده" />
     </div>
-  </header>
 
-  <main>
+    <div class="hero-badge reveal">NeoSkyVerse</div>
 
-    <!-- درباره من -->
-    <section>
-      <h2 class="section-title">درباره من</h2>
-      <p>
-        خلاق، ایده‌پرداز و داستان‌گو. از طراحی هویت بصری تا تولید محتوای هدفمند، 
-        تمام مراحل یک پروژه خلاقانه را از ایده تا اجرا پوشش می‌دهم.
-      </p>
-    </section>
+    <h1 class="reveal">
+      <span>یاشا یاورزاده</span>
+    </h1>
+    <p class="hero-title-en reveal">Yasha Yavarzadeh — Creative Director</p>
 
-    <!-- مهارت‌ها -->
-    <section>
-      <h2 class="section-title">مهارت‌ها</h2>
-      <div class="skills-grid">
+    <div class="hero-tags reveal">
+      <span class="tag">طراح گرافیک</span>
+      <span class="tag">تولید محتوا</span>
+      <span class="tag">ایده‌پردازی</span>
+      <span class="tag">فیلمنامه‌نویسی</span>
+      <span class="tag">تدوین ویدیو تبلیغاتی</span>
+      <span class="tag">طراحی وب</span>
+    </div>
 
-        <div class="skill-item">
-          <div class="skill-label"><span>طراحی گرافیک</span><span>۹۰٪</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
-        </div>
-
-        <div class="skill-item">
-          <div class="skill-label"><span>تولید محتوا</span><span>۸۵٪</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
-        </div>
-
-        <div class="skill-item">
-          <div class="skill-label"><span>ویرایش ویدیو</span><span>۸۰٪</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
-        </div>
-
-        <div class="skill-item">
-          <div class="skill-label"><span>سناریونویسی</span><span>۷۵٪</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
-        </div>
-
-        <div class="skill-item">
-          <div class="skill-label"><span>طراحی وب</span><span>۷۰٪</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
-        </div>
-
-        <div class="skill-item">
-          <div class="skill-label"><span>ایده‌پردازی</span><span>۹۵٪</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- نمونه کارها -->
-    <section>
-      <h2 class="section-title">نمونه کارها</h2>
-      <div class="portfolio-grid">
-
-        <div class="portfolio-card">
-          <img src="work1.jpg" alt="نمونه کار ۱" />
-          <div class="card-label">طراحی پوستر</div>
-        </div>
-
-        <div class="portfolio-card">
-          <img src="work2.jpg" alt="نمونه کار ۲" />
-          <div class="card-label">طراحی لوگو</div>
-        </div>
-
-        <div class="portfolio-card">
-          <img src="work3.jpg" alt="نمونه کار ۳" />
-          <div class="card-label">محتوای شبکه اجتماعی</div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <div class="cta-block">
-      <p>آماده همکاری در پروژه‌های خلاقانه شما هستم.</p>
-      <a class="btn" href="https://parsiantanpoosh.ir/" target="_blank" rel="noopener">
-        مشاهده وب‌سایت
+    <div class="hero-cta reveal">
+      <a href="#portfolio" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        مشاهده نمونه‌کار
+      </a>
+      <a href="#contact" class="btn btn-outline">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.4 2 2 0 0 1 3.62 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        تماس با من
       </a>
     </div>
+  </section>
 
-  </main>
+  <!-- ── About ─────────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <div class="section-label">درباره من</div>
+          <h2 class="section-title" style="margin-bottom:20px;">خلاقیت، محتوا، هویت بصری</h2>
+          <p>
+            طراح خلاق و تولیدکننده محتوا با تجربه در ساخت هویت بصری برندها،
+            تدوین ویدیوهای تبلیغاتی کوتاه، و طراحی وب‌سایت‌های حرفه‌ای.
+          </p>
+          <p>
+            ایده‌پردازی و فیلمنامه‌نویسی برای پروژه‌های تبلیغاتی بخشی از
+            مسیری‌ست که در برند NeoSkyVerse دنبال می‌کنم — از ایده تا اجرا.
+          </p>
+          <div class="about-contact">
+            <div class="contact-row">
+              <div class="contact-icon">📞</div>
+              <span style="direction:ltr;">09335642236</span>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon">🌐</div>
+              <a href="https://parsiantanpoosh.ir" target="_blank" rel="noopener"
+                 style="color:var(--cyan);">parsiantanpoosh.ir</a>
+            </div>
+          </div>
+        </div>
+        <div class="about-logo reveal">
+          <img src="NeoSkyVerse.webp" alt="NeoSkyVerse Logo" />
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ── Services ──────────────────────────────────────────────── -->
+  <section id="services">
+    <div class="container">
+      <div class="section-label reveal">خدمات</div>
+      <h2 class="section-title reveal">چه کارهایی انجام می‌دم</h2>
+      <div class="services-grid">
+
+        <div class="service-card reveal">
+          <div class="service-icon">🎨</div>
+          <h3>طراحی گرافیک</h3>
+          <p>طراحی لوگو، هویت بصری برند، پوستر و بنر تبلیغاتی با رویکرد خلاقانه و مدرن.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">📝</div>
+          <h3>تولید محتوا</h3>
+          <p>تولید محتوای متنی، بصری و ویدیویی برای شبکه‌های اجتماعی و پلتفرم‌های دیجیتال.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">💡</div>
+          <h3>ایده‌پردازی و مفهوم‌سازی</h3>
+          <p>خلق ایده‌های اجرایی برای کمپین‌های تبلیغاتی، معرفی محصول و برندسازی.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">🎬</div>
+          <h3>فیلمنامه و تدوین ویدیو</h3>
+          <p>نوشتن اسکریپت و تدوین ویدیوهای کوتاه تبلیغاتی برای اینستاگرام، یوتیوب و سایر پلتفرم‌ها.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">🖥️</div>
+          <h3>طراحی وب‌سایت</h3>
+          <p>طراحی و ساخت وب‌سایت‌های حرفه‌ای، ریسپانسیو و بهینه برای کسب‌وکارها.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <div class="service-icon">✍️</div>
+          <h3>فیلمنامه‌نویسی</h3>
+          <p>نوشتن متن و دیالوگ برای محتواهای ویدیویی با تکیه بر اصول داستان‌گویی مؤثر.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Portfolio ─────────────────────────────────────────────── -->
+  <section id="portfolio">
+    <div class="container">
+      <div class="portfolio-header">
+        <div>
+          <div class="section-label reveal">نمونه‌کار</div>
+          <h2 class="section-title reveal" style="margin-bottom:0;">آثار گرافیکی</h2>
+        </div>
+      </div>
+
+      <div class="portfolio-grid">
+        <!--
+          ══════════════════════════════════════════════
+          راهنما:
+          عکس‌های نمونه‌کار را داخل پوشه images/ آپلود کن
+          بعد src را به اسم فایل تغییر بده، مثلاً:
+          <img src="images/work-1.jpg" alt="..." class="portfolio-thumb" />
+          ══════════════════════════════════════════════
+        -->
+
+        <div class="portfolio-card reveal">
+          <div class="portfolio-thumb-placeholder">
+            <span>🖼️</span>
+            <p>نمونه‌کار گرافیک ۱</p>
+          </div>
+          <div class="portfolio-info">
+            <h4>طراحی لوگو</h4>
+            <p>هویت بصری برند</p>
+          </div>
+        </div>
+
+        <div class="portfolio-card reveal">
+          <div class="portfolio-thumb-placeholder">
+            <span>🖼️</span>
+            <p>نمونه‌کار گرافیک ۲</p>
+          </div>
+          <div class="portfolio-info">
+            <h4>پوستر تبلیغاتی</h4>
+            <p>گرافیک دیجیتال</p>
+          </div>
+        </div>
+
+        <div class="portfolio-card reveal">
+          <div class="portfolio-thumb-placeholder">
+            <span>🖼️</span>
+            <p>نمونه‌کار گرافیک ۳</p>
+          </div>
+          <div class="portfolio-info">
+            <h4>محتوای شبکه اجتماعی</h4>
+            <p>اینستاگرام / تلگرام</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA به وب‌سایت -->
+      <div class="portfolio-cta-box reveal">
+        <h3>نمونه‌کارهای بیشتر در وب‌سایت</h3>
+        <p>برای مشاهده پروژه‌های طراحی وب و سایر آثار، روی دکمه زیر کلیک کنید</p>
+        <a href="https://parsiantanpoosh.ir" target="_blank" rel="noopener" class="btn-cta">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          مشاهده وب‌سایت parsiantanpoosh.ir
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Contact ───────────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-label reveal">ارتباط</div>
+      <h2 class="section-title reveal">تماس با من</h2>
+      <div class="contact-grid">
+
+        <div class="contact-card reveal">
+          <h3>اطلاعات تماس</h3>
+          <div class="contact-item">
+            <div class="ci-icon">📞</div>
+            <div>
+              <div class="ci-label">تلفن / واتساپ</div>
+              <div class="ci-value">09335642236</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">🌐</div>
+            <div>
+              <div class="ci-label">وب‌سایت</div>
+              <div class="ci-value">
+                <a href="https://parsiantanpoosh.ir" target="_blank" rel="noopener"
+                   style="color:var(--cyan);">parsiantanpoosh.ir</a>
+              </div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="ci-icon">🏷️</div>
+            <div>
+              <div class="ci-label">برند</div>
+              <div class="ci-value">NeoSkyVerse</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card reveal" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;">
+          <img src="NeoSkyVerse.webp" alt="NeoSkyVerse"
+               style="max-width:160px;filter:drop-shadow(0 0 20px var(--cyan-glow));" />
+          <p style="color:var(--text-muted);font-size:.88rem;line-height:1.8;">
+            آماده همکاری در پروژه‌های خلاقانه،<br/>طراحی و تولید محتوای دیجیتال
+          </p>
+          <a href="tel:09335642236" class="btn btn-primary" style="width:100%;justify-content:center;">
+            📞 &nbsp;تماس بگیر
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────────── -->
+  <footer>
+    <img src="NeoSkyVerse.webp" alt="NeoSkyVerse" />
+    <p>ساخته‌شده با ❤️ توسط <span>یاشا یاورزاده</span> | NeoSkyVerse © 1404</p>
+  </footer>
+
+  <script>
+    // ── Progress bar ──────────────────────────────────────────────
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      bar.style.transform = `scaleX(${pct})`;
+    }, { passive: true });
+
+    // ── Scroll-reveal ─────────────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
